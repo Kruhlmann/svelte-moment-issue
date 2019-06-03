@@ -1,6 +1,9 @@
 <script>
     import IconPicker from "./IconPicker.svelte"
     import NiceCheck from "./NiceCheck.svelte"
+    import PositionInput from "./PositionInput.svelte";
+    import ColorPicker from "./ColorPicker.svelte";
+    import SoundPicker from "./SoundPicker.svelte";
     import { onMount } from "svelte";
     import { open_files } from "../stores.js";
     import ace from "ace-builds";
@@ -81,9 +84,6 @@
                     </div>
                 </div>
                 <div class="gui-editor-content">
-                    <div class="entry-divider">
-                        <span>Meta</span>
-                    </div>
                     <div class="input-entry">
                         <span class="label">ID</span>
                         <div class="styled-select">
@@ -105,8 +105,13 @@
                         </div>
                     </div>
                     <div class="input-entry">
+                        <span class="label">Favorite</span>
+                        <NiceCheck/>
+                    </div>
+                    <div class="input-entry">
                         <span class="label">Icon</span>
                         <IconPicker
+                            bind:opacity={shown_file.aura.alpha}
                             defaultico="{shown_file.icon.toLowerCase()}"
                             on:icon={event => set_icon(event.detail.icon)}
                         />
@@ -117,11 +122,111 @@
                         <textarea placeholder="No description.">{shown_file.description || ""}</textarea>
                     </div>
                     <div class="input-entry">
-                        <span class="label">Favorite</span>
+                        <span class="label">Position</span>
+                        <PositionInput/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">Resolution</span>
+                        <div class="styled-select">
+                            <select>
+                                <option selected>1920x1080</option>
+                                <option>800x600</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">X position</span>
+                        <input type="text" bind:value="{shown_file.aura.x}"/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">Y position</span>
+                        <input type="text" bind:value="{shown_file.aura.y}"/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">Scale</span>
+                        <div class="pseudo">
+                            <span class="pseudo-label">{shown_file.aura.scalefactor}</span>
+                            <input type="range" min="0" max="2" step="0.01" bind:value="{shown_file.aura.scalefactor}">
+                        </div>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">Aura opacity</span>
+                        <div class="pseudo">
+                            <span class="pseudo-label">{shown_file.aura.alpha}</span>
+                            <input type="range" min="0" max="1" step="0.01" bind:value="{shown_file.aura.alpha}">
+                        </div>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">Font color</span>
+                        <ColorPicker/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">Buff name</span>
+                        <input type="text" bind:value="{shown_file.aura.buffname}"/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">Exact name</span>
                         <NiceCheck/>
                     </div>
-                    <div class="entry-divider">
-                        <span>Aura</span>
+                    <div class="input-entry">
+                        <span class="label">Invert</span>
+                        <NiceCheck/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">Debuff</span>
+                        <NiceCheck/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">On enemy target</span>
+                        <NiceCheck/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">On friendly target</span>
+                        <NiceCheck/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">On raid/group member</span>
+                        <NiceCheck/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">While alive</span>
+                        <NiceCheck/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">While cooling down</span>
+                        <NiceCheck/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">While in combat</span>
+                        <NiceCheck/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">While in party</span>
+                        <NiceCheck/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">While in raid</span>
+                        <NiceCheck/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">While in battleground</span>
+                        <NiceCheck/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">While in raid instance</span>
+                        <NiceCheck/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">Hide stacks</span>
+                        <NiceCheck/>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">Required stacks</span>
+                        <input type="text" bind:value={shown_file.aura.stacks}>
+                    </div>
+                    <div class="input-entry">
+                        <span class="label">Trigger sound</span>
+                        <SoundPicker/>
                     </div>
                 </div>
             </div>
@@ -317,19 +422,6 @@
                     margin-top: 5px;
                     display: flex;
                     flex-direction: column;
-
-                    .entry-divider{
-                        width: 100%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-
-                        span {
-                            font-size: 15px;
-                            font-style: italic;
-                        }
-                    }
-
                     .input-entry {
                         display: flex;
                         align-items: center;
@@ -343,19 +435,54 @@
                             text-overflow: ellipsis;
                         }
 
-                        input[type="text"] {
+                        input[type="text"], input[type="number"], .pseudo {
                             width: 200px;
                             height: 24px;
                             overflow: hidden;
                             background-color: #192830;
-                            border: 1px solid #ccc;
+                            color: #CCC;
+                            border: 1px solid #CCC;
                             box-sizing: border-box;
                             font-size: 13px;
                             padding: 0 14px;
                             padding-bottom: 2px;
+                            text-overflow: ellipsis;
 
                             &:hover, &:focus {
                                 background-color: #1e4054;
+                            }
+                        }
+
+                        .pseudo {
+                            display: flex;
+                            align-items: center;
+
+                            span {
+                                width: 25px;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                margin-right: 5px;
+                            }
+
+                            input[type="range"] {
+                                width: 135px;
+                                height: 1px;
+                                -webkit-appearance: none;
+                                background-color: #CCC;
+
+                                &::-webkit-slider-thumb, &::-moz-range-thumb {
+                                    width: 11px;
+                                    height: 11px;
+                                    border-radius: 6px;
+                                    background-color: #CCC;
+                                    cursor: pointer;
+                                }
+
+                                &::-webkit-slider-thumb {
+                                    -webkit-appearance: none;
+                                    appearance: none;
+                                }
                             }
                         }
 

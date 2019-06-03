@@ -194,7 +194,7 @@
     <div class="outline" bind:this={outline_wrapper}>
         <div class="item" bind:this={files_outline}>
             <div class="header">
-                <span class="title">My power auras</span>
+                <span class="title">My collection</span>
                 <div class="btn-grp">
                     <i class="fas fa-plus" on:click={show_new_file_input} bind:this={add_file_btn}></i>
                     <i class="fas fa-download"></i>

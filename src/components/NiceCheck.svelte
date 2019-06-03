@@ -1,23 +1,25 @@
 <script>
+    export let checked = false;
 
-    let checked;
+    let check = checked;
 
 </script>
 
 <div class="nice-check">
-    <div class="box" class:checked={checked} on:click={() => checked = !checked}>
+    <div class="box" class:checked={check} on:click={() => check = !check}>
         <div class="when-checked">
-            <div class="checkmark">
-                <i class="fas fa-check"></i>
-            </div>
+            Yes
+        </div>
+        <div class="when-not-checked">
+            No
         </div>
     </div>
-    <input type="checkbox" class="hidden" bind:value={checked}/>
+    <input type="checkbox" class="hidden" bind:value={check}/>
 </div>
 
 <style lang="scss">
     .box {
-        width: 24px;
+        width: 200px;
         height: 24px;
         box-sizing: border-box;
         border: 1px solid #CCC;
@@ -26,17 +28,20 @@
 
         .when-checked, .when-not-checked {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 24px;
-            height: 24px;
             position: relative;
+            align-items: center;
+            top: -24px;
+            width: 200px;
+            height: 24px;
+            padding: 0 10px;
             transition: top 0.15s linear;
+            margin-top: -1px;
+            font-size: 13px;
+            text-transform: capitalize;
         }
 
         .when-checked {
-            top: -24px;
-            background-color: #3f80c9;
+            background-color: #1e4054;
 
             i {
                 width: 20px;
@@ -45,17 +50,12 @@
         }
 
         .when-not-checked {
-            top: 0;
             background-color: #192830;
         }
 
         &.checked {
-            .when-checked {
-                top: 0px;
-            }
-
-            .when-not-checked {
-                top: 24px;
+            .when-checked, .when-not-checked  {
+                top: 0;
             }
         }
     }

@@ -4,6 +4,7 @@
 
     export let defaultico = "ability_ambush";
     export let open = false;
+    export let opacity = 1;
 
     const dispatch = createEventDispatcher();
 
@@ -49,6 +50,7 @@
                     src="img/{hover_icon || chosen_icon || defaultico}.jpg"
                     alt="Icon preview {hover_icon || chosen_icon || defaultico}"
                     on:click={() => open = !open}
+                    style="opacity: {opacity};"
                 >
             </div>
             <div class="name" on:click={() => open = true}>{hover_icon || chosen_icon || defaultico}</div>
