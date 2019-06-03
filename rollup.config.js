@@ -1,9 +1,9 @@
 import svelte from "rollup-plugin-svelte";
-import { sass } from "svelte-preprocess-sass";
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import livereload from 'rollup-plugin-livereload';
-import { terser } from 'rollup-plugin-terser';
+import resolve from "rollup-plugin-node-resolve";
+import commonjs from "rollup-plugin-commonjs";
+import livereload from "rollup-plugin-livereload";
+import { terser } from "rollup-plugin-terser";
+import autoPreprocess from "svelte-preprocess"
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -12,27 +12,23 @@ export default {
     output: {
         sourcemap: true,
         name: "app",
-        file: "public/bundle.js",
+        file: "public/dist/bundle.js",
         format: "iife"
     },
     plugins: [
         svelte({
+            preprocess: autoPreprocess(),
+
             // By default, all .svelte and .html files are compiled
             extensions: [".svelte"],
 
-            preprocess: {
-                style: sass(),
-            },
-
-            // Emit CSS as "files" for other plugins to process
-            emitCss: true,
-
             // enable run-time checks when not in production
             dev: !production,
-            // we'll extract any component CSS out into
+
+            // we"ll extract any component CSS out into
             // a separate file — better for performance
             css: css => {
-                css.write('public/bundle.css');
+                css.write("public/dist/bundle.css");
             },
         }),
 
@@ -46,7 +42,7 @@ export default {
 
         // Watch the `public` directory and refresh the
         // browser on changes when not in production
-        !production && livereload('public'),
+        !production && livereload("public"),
 
         // If we're building for production (npm run build
         // instead of npm run dev), minify
