@@ -2,6 +2,7 @@ import svelte from "rollup-plugin-svelte";
 import resolve from "rollup-plugin-node-resolve";
 import commonjs from "rollup-plugin-commonjs";
 import livereload from "rollup-plugin-livereload";
+import babel from "rollup-plugin-babel";
 import { terser } from "rollup-plugin-terser";
 import autoPreprocess from "svelte-preprocess"
 
@@ -37,9 +38,9 @@ export default {
         // some cases you'll need additional configuration —
         // consult the documentation for details:
         // https://github.com/rollup/rollup-plugin-commonjs
+        babel(),
         resolve(),
         commonjs(),
-
         // Watch the `public` directory and refresh the
         // browser on changes when not in production
         !production && livereload("public"),
